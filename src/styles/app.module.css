@@ -1,24 +1,22 @@
 .app {
   background-color: #fad961;
   background-image: linear-gradient(225deg, #fad961 0%, #f76b1c 100%);
+  height: 100%;
+  font-family: "Quicksand", sans-serif;
+  font-size: 18px;
 }
 
 .container {
-  height: 100vh;
-  display: flex;
-  place-content: center;
+  height: calc(100vh - 50px);
+  display: grid;
+  place-items: center;
   flex-direction: column;
-  padding: 0 25px;
-}
-
-.current {
-  width: 100%;
-  height: 300px;
-  background-color: blanchedalmond;
+  padding: 25px;
 }
 
 .forecast {
   width: 100%;
-  height: 100px;
+  max-width: 1024px;
+  height: 200px;
   background-color: #f76b1c;
 }

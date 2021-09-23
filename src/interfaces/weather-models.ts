@@ -1,6 +1,6 @@
 import { WeatherCodes } from "../assets/icons";
 
-export interface IWeatherData {
+export interface WeatherData {
   weather: {
     id: number;
     main: string;
@@ -25,16 +25,5 @@ export interface IWeatherData {
     sunset: number;
   };
   name: string;
-}
-
-export interface IExtendedForecastData {
-  day: string;
-  temp: {
-    temp_min: number;
-    temp_max: number;
-  };
-  weather: {
-    id: number;
-    main: string;
-  };
+  dt: number;
 }
