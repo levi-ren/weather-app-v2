@@ -8,11 +8,11 @@ hr {
   padding: 18px;
   font-size: 1.1em;
   font-weight: 500;
-  color: #555;
+  color: whitesmoke;
 
-  backdrop-filter: blur(20px) saturate(128%);
-  -webkit-backdrop-filter: blur(20px) saturate(128%);
-  background-color: rgba(255, 255, 255, 0.65);
+  backdrop-filter: blur(30px) saturate(200%);
+  -webkit-backdrop-filter: blur(10px) saturate(200%);
+  background-color: rgba(255, 255, 255, 0.4);
   border-radius: 12px;
   border: 1px solid rgba(209, 213, 219, 0.3);
 }
@@ -20,17 +20,150 @@ hr {
 .main {
   font-size: 1.1em;
   font-weight: 700;
-  display: grid;
-  place-content: center;
+  margin: 30px 20px 0 20px;
+  display: flex;
+  justify-content: space-between;
 }
 
-.main > p {
+.temp {
   margin: 0;
-  text-transform: capitalize;
-  text-align: center;
+  font-size: 5em;
+  font-weight: 800;
+  font-family: "Stick No Bills", sans-serif;
+
+  line-height: 160px;
+  height: 130px;
+}
+
+.weather {
+  display: flex;
+  align-items: center;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.45);
+  justify-content: space-evenly;
+  margin-bottom: 5px;
 }
 
 .icon {
-  width: 50vw;
-  max-width: 400px;
+  width: 100vw;
+  max-width: 65px;
+}
+
+.suntiming {
+  display: flex;
+  justify-content: space-between;
+  margin: 10px 0;
+}
+
+.suntime {
+  display: flex;
+  flex-direction: column;
+  font-size: 16px;
+  font-weight: 300;
+}
+
+.suntime > div {
+  display: flex;
+  align-items: center;
+}
+
+.suntime > div > .icon {
+  max-width: 36px;
+}
+.suntime > div > .icon > svg > path {
+  stroke: white;
+}
+
+.left {
+  margin: 10px;
+  text-transform: capitalize;
+}
+
+.left > p:first-of-type {
+  max-height: 27px;
+}
+
+.right {
+  margin: 10px;
+  display: flex;
+  flex-direction: column;
+  text-align: right;
+}
+
+.temperatures {
+  margin-bottom: 5px;
+  font-size: 16px;
+  font-weight: 300;
+  color: white;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  text-align: center;
+
+  border-bottom: 1px solid rgba(255, 255, 255, 0.45);
+}
+
+.temperatures > div > div {
+  display: flex;
+  align-items: center;
+}
+
+.temperatures > div > div > .icon {
+  max-width: 50px;
+  display: flex;
+  align-items: center;
+}
+
+.temperatures > div > div > .icon > svg > path {
+  fill: transparent;
+}
+
+.misc {
+  text-align: center;
+  margin-top: 5px;
+  font-size: 16px;
+  font-weight: 300;
+  color: white;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+.misc > div {
+  margin: 0 15px;
+}
+.misc > div > div {
+  display: flex;
+  align-items: center;
+}
+
+.misc > div > div > .icon {
+  max-width: 40px;
+  display: flex;
+}
+
+.misc > div > div > .icon > svg > path:first-of-type {
+  fill: #2885c7;
+}
+
+sup {
+  font-size: 8px;
+}
+
+@media only screen and (max-width: 560px) {
+  .main {
+    flex-direction: column;
+    align-items: center;
+  }
+
+  .weather {
+    justify-content: space-evenly;
+  }
+
+  .left {
+    text-align: center;
+    border-bottom: 5px double rgba(255, 255, 255, 0.45);
+  }
+
+  .right {
+    text-align: center;
+  }
 }
