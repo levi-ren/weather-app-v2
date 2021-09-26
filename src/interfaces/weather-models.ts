@@ -26,4 +26,5 @@ export interface WeatherData {
   };
   name: string;
   dt: number;
+  coord: { lat: number; lon: number };
 }

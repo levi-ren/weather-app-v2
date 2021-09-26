@@ -3,6 +3,7 @@ import { ReactComponent as Humidity } from "./assets/humidity.svg";
 import icons from "./assets/icons";
 import { ReactComponent as SunRise } from "./assets/sunrise.svg";
 import { ReactComponent as SunSet } from "./assets/sunset.svg";
+import { ReactComponent as Sync } from "./assets/sync.svg";
 import { ReactComponent as LowTemp } from "./assets/thermometer-colder.svg";
 import { ReactComponent as HighTemp } from "./assets/thermometer-warmer.svg";
 import { WeatherData } from "./interfaces/weather-models";
@@ -13,14 +14,25 @@ const codes = countryCodes as { [key: string]: string };
 
 interface ICurrentWeatherProps {
   weather: WeatherData;
+  refreshWeather?: () => void;
 }
 
-const CurrentWeather = ({ weather }: ICurrentWeatherProps) => {
+const createTime = (epoch: number) => {
+  return new Date(epoch * 1000).toLocaleTimeString(navigator.language, {
+    hour: "2-digit",
+    minute: "2-digit",
+  });
+};
+
+const CurrentWeather = ({ weather, refreshWeather }: ICurrentWeatherProps) => {
   console.log(weather);
 
   return (
     <div className={styles.current}>
-      <div className="top">Current Weather</div>
+      <div className={styles.header}>
+        <p>Current Weather</p>
+        <Sync onClick={refreshWeather} />
+      </div>
       <hr />
       <div className={styles.main}>
         <div className={styles.left}>
@@ -36,31 +48,30 @@ const CurrentWeather = ({ weather }: ICurrentWeatherProps) => {
           </div>
           <div className={styles.suntiming}>
             <div className={styles.suntime}>
-              <p>Sun rise:</p>
+              <p>Sunrise:</p>
               <div>
                 <div className={styles.icon}>
                   <SunRise />
                 </div>
 
-                <p>
-                  {new Date(weather.sys.sunrise * 1000).toLocaleTimeString()}
-                </p>
+                <p>{createTime(weather.sys.sunrise)}</p>
               </div>
             </div>
             <div className={styles.suntime}>
-              <p>Sun set:</p>
+              <p>Sunset:</p>
               <div>
                 <div className={styles.icon}>
                   <SunSet />
                 </div>
 
-                <p>
-                  {new Date(weather.sys.sunset * 1000).toLocaleTimeString()}
-                </p>
+                <p>{createTime(weather.sys.sunset)}</p>
               </div>
             </div>
           </div>
         </div>
+
+        <span className={styles.divider} />
+
         <div className={styles.right}>
           <p>But feels like...</p>
           <p className={styles.temp}>{Math.round(weather.main.feels_like)}°</p>

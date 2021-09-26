@@ -1,21 +1,76 @@
-import axios from "axios";
+import axios, { AxiosResponse } from "axios";
+import { WeatherData } from "../interfaces/weather-models";
 
-axios.defaults.baseURL = "https://api.openweathermap.org/";
+axios.defaults.baseURL = "https://api.openweathermap.org/data/2.5";
 
 const key = process.env.REACT_APP_API_KEY;
 
-const api = (lat: number, lon: number) => {
-  return [
-    axios.get(
-      `/data/2.5/weather?lat=${lat}&lon=${lon}&appid=${key}&units=metric`
-    ),
-    axios.get(`data/2.5/onecall?lat=${lat}&lon=${lon}&appid=${key}`),
-  ];
+export interface Options {
+  city?: string;
+  coordinates?: Number[];
+  units: string;
+}
+
+export const checkAndParseToCoordinates = (x: string, y: string) => {
+  const lat = parseFloat(x);
+  const lon = parseFloat(y);
+  return !isNaN(lat) &&
+    !isNaN(lon) &&
+    lat <= 90 &&
+    lat >= -90 &&
+    lon <= 90 &&
+    lon >= -90
+    ? [lat, lon]
+    : false;
 };
 
-export const fetchWeather = (lat: number, lon: number) => {
-  return axios.all(api(lat, lon)).then(
-    axios.spread((weather, forecast) => {
+const paramBuilder = ({ city, coordinates, units }: Options) => {
+  const params = {
+    ...(coordinates && { lat: coordinates[0]?.toString() }),
+    ...(coordinates && { lon: coordinates[1]?.toString() }),
+    ...(city && { q: city }),
+    units,
+    appid: key?.toString() || "",
+  };
+
+  return new URLSearchParams(params).toString();
+};
+
+const apiWeather = (params: string) => {
+  return axios.get<WeatherData>(`/weather?${params}`);
+};
+const apiOneCall = (params: string) => {
+  return axios.get(`/onecall?${params}`);
+};
+
+const searchByCity = (params: string, units: string) => {
+  return apiWeather(params).then((resp) => {
+    const {
+      data: {
+        coord: { lat, lon },
+      },
+    } = resp;
+
+    return apiOneCall(paramBuilder({ coordinates: [lat, lon], units })).then(
+      (respo) => {
+        return { current: resp.data, forecast: respo.data };
+      }
+    );
+  });
+};
+
+export const fetchWeather = (options: Options) => {
+  const searchParams = paramBuilder(options);
+
+  if (options.city) {
+    return searchByCity(searchParams, options.units);
+  }
+
+  return axios.all([apiWeather(searchParams), apiOneCall(searchParams)]).then(
+    axios.spread<
+      AxiosResponse<any>,
+      { current: WeatherData; forecast: string }
+    >((weather, forecast) => {
       return { current: weather.data, forecast: forecast.data };
     })
   );
