@@ -1,8 +1,9 @@
 import { ChangeEvent, KeyboardEvent, useEffect, useRef, useState } from "react";
 import { ReactComponent as Pin } from "./assets/pin.svg";
 import { ReactComponent as Search } from "./assets/search.svg";
-import CurrentWeather from "./CurrentWeather";
-import { WeatherData } from "./interfaces/weather-models";
+import CurrentWeather from "./components/current-weather/CurrentWeather";
+import Forecasts from "./Forecasts";
+import { ForecastData, WeatherData } from "./interfaces/weather-models";
 import { Footer, Header } from "./Spacers";
 import styles from "./styles/app.module.css";
 import {
@@ -15,7 +16,7 @@ function App() {
   const input = useRef<HTMLInputElement>(null);
   const [coords, setCoords] = useState<Number[]>();
   const [weather, setWeather] =
-    useState<{ current: WeatherData; forecast: any }>();
+    useState<{ current: WeatherData; forecast: ForecastData }>();
   const [location, setLocation] = useState("");
   const [units, setUnits] = useState("Metric");
 
@@ -33,6 +34,13 @@ function App() {
     fetchWeather(options).then(setWeather);
   };
 
+  const sync = () => {
+    if (weather) {
+      const { lat, lon } = weather.current.coord;
+      refresh({ coordinates: [lat, lon], units });
+    }
+  };
+
   const onSearch = (e: ChangeEvent<HTMLInputElement>) => {
     setLocation(e.target.value);
   };
@@ -42,8 +50,10 @@ function App() {
       const value = location.split(",");
       if (value.length === 2) {
         const parsedCoords = checkAndParseToCoordinates(value[0], value[1]);
-        parsedCoords && setCoords(parsedCoords);
-        return;
+        if (parsedCoords) {
+          setCoords(parsedCoords);
+          return;
+        }
       }
       refresh({ city: location, units });
     }
@@ -72,8 +82,12 @@ function App() {
         </div>
         {weather && (
           <>
-            <CurrentWeather weather={weather.current} />
-            <div className={styles.forecast}></div>
+            <CurrentWeather
+              weather={weather.current}
+              timeZone={weather.forecast.timezone}
+              refreshWeather={sync}
+            />
+            <Forecasts weather={weather.forecast} />
             <Footer />
           </>
         )}

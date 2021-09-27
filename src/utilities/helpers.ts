@@ -1,5 +1,5 @@
-import axios, { AxiosResponse } from "axios";
-import { WeatherData } from "../interfaces/weather-models";
+import axios from "axios";
+import { ForecastData, WeatherData } from "../interfaces/weather-models";
 
 axios.defaults.baseURL = "https://api.openweathermap.org/data/2.5";
 
@@ -39,8 +39,11 @@ const paramBuilder = ({ city, coordinates, units }: Options) => {
 const apiWeather = (params: string) => {
   return axios.get<WeatherData>(`/weather?${params}`);
 };
+
 const apiOneCall = (params: string) => {
-  return axios.get(`/onecall?${params}`);
+  return axios.get<ForecastData>(
+    `/onecall?${params}&exclude=minutely,hourly,alerts`
+  );
 };
 
 const searchByCity = (params: string, units: string) => {
@@ -52,9 +55,7 @@ const searchByCity = (params: string, units: string) => {
     } = resp;
 
     return apiOneCall(paramBuilder({ coordinates: [lat, lon], units })).then(
-      (respo) => {
-        return { current: resp.data, forecast: respo.data };
-      }
+      (respo) => ({ current: resp.data, forecast: respo.data })
     );
   });
 };
@@ -66,12 +67,10 @@ export const fetchWeather = (options: Options) => {
     return searchByCity(searchParams, options.units);
   }
 
-  return axios.all([apiWeather(searchParams), apiOneCall(searchParams)]).then(
-    axios.spread<
-      AxiosResponse<any>,
-      { current: WeatherData; forecast: string }
-    >((weather, forecast) => {
-      return { current: weather.data, forecast: forecast.data };
+  return Promise.all([apiWeather(searchParams), apiOneCall(searchParams)]).then(
+    ([weather, forecast]) => ({
+      current: weather.data,
+      forecast: forecast.data,
     })
   );
 };
