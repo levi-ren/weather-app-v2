@@ -1,12 +1,35 @@
-.header {
+.header,
+.footer {
   color: white;
   font-weight: 300;
   margin: 32px 0;
 }
 
+.footer {
+  text-align: end;
+}
+
+a {
+  color: inherit;
+}
+
+.icons {
+  max-width: 30px;
+  margin: 0 10px;
+}
+
+@media only screen and (max-width: 500px) {
+  .footer {
+    text-align: center;
+  }
+
+  h1 {
+    text-align: center;
+  }
+}
+
 @media only screen and (max-width: 374px) {
   h1 {
     font-size: 1.6em;
-    text-align: center;
   }
 }

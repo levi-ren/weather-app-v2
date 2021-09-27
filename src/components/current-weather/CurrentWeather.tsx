@@ -3,6 +3,7 @@ import { ReactComponent as SunRise } from "../../assets/sunrise.svg";
 import { ReactComponent as SunSet } from "../../assets/sunset.svg";
 import { ReactComponent as Sync } from "../../assets/sync.svg";
 import { WeatherData } from "../../interfaces/weather-models";
+import global from "../../styles/global.module.css";
 import { default as countryCodes } from "../../utilities/country-codes.json";
 import styles from "./current-weather.module.css";
 
@@ -50,12 +51,12 @@ const DateTimeComponent = (props: IDateTimeComponentProps) => {
 interface ICurrentWeatherProps {
   weather: WeatherData;
   timeZone: string;
+  loading: boolean;
   refreshWeather: () => void;
 }
 
 const CurrentWeather = (props: ICurrentWeatherProps) => {
-  const { weather, timeZone, refreshWeather } = props;
-  // console.log(weather);
+  const { weather, timeZone, loading, refreshWeather } = props;
 
   return (
     <div className={styles.current}>
@@ -64,7 +65,8 @@ const CurrentWeather = (props: ICurrentWeatherProps) => {
         <Sync onClick={refreshWeather} />
       </div>
       <hr />
-      <div className={styles.main}>
+      <div className={`${styles.main} ${loading ? global.loading : ""}`}>
+        <div className={global.spinner} />
         <div className={styles.left}>
           <p className={styles.temperature}>{Math.round(weather.main.temp)}°</p>
           <p className={styles.feels}>

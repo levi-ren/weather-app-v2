@@ -6,7 +6,11 @@ interface IForecastsProps {
 }
 
 const Forecasts = ({ weather }: IForecastsProps) => {
-  return <div className={styles.forecast}></div>;
+  return (
+    <div className={`${styles.forecast} loading`}>
+      <div className="spinner" />
+    </div>
+  );
 };
 
 export default Forecasts;

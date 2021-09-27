@@ -35,9 +35,10 @@ hr {
 }
 
 .main {
-  margin: 30px 30px 0;
+  margin: 30px 30px 20px;
   display: flex;
   justify-content: space-between;
+  position: relative;
 }
 
 .left {
@@ -54,8 +55,8 @@ hr {
   font-weight: 800;
   font-family: "Stick No Bills", sans-serif;
 
-  line-height: 80px;
-  height: 70px;
+  line-height: 70px;
+  height: 65px;
 }
 
 .weatherDescription,
@@ -104,7 +105,7 @@ hr {
 }
 
 .suntime > svg {
-  width: 60px;
+  width: 50px;
 }
 
 .suntime > .time {

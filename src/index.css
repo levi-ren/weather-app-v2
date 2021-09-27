@@ -10,10 +10,13 @@ body {
   justify-content: center;
   min-height: 100vh;
 
-  background-image: url(./assets/afternoon.svg);
+  background-image: url(./assets/day.svg);
   background-attachment: fixed;
   background-size: cover;
   background-repeat: no-repeat;
+
+  transition: 1s ease all;
+  overflow: hidden;
 }
 
 #root {

@@ -1,10 +1,13 @@
 import { ChangeEvent, KeyboardEvent, useEffect, useRef, useState } from "react";
+import afternoon from "./assets/afternoon.svg";
+import day from "./assets/day.svg";
+import night from "./assets/night.svg";
 import { ReactComponent as Pin } from "./assets/pin.svg";
 import { ReactComponent as Search } from "./assets/search.svg";
 import CurrentWeather from "./components/current-weather/CurrentWeather";
+import { Footer, Header } from "./components/Spacers";
 import Forecasts from "./Forecasts";
 import { ForecastData, WeatherData } from "./interfaces/weather-models";
-import { Footer, Header } from "./Spacers";
 import styles from "./styles/app.module.css";
 import {
   checkAndParseToCoordinates,
@@ -19,19 +22,27 @@ function App() {
     useState<{ current: WeatherData; forecast: ForecastData }>();
   const [location, setLocation] = useState("");
   const [units, setUnits] = useState("Metric");
+  const [loading, setLoading] = useState(false);
 
   const focusInput = () => {
     input.current?.focus();
   };
 
   const getLocation = () => {
-    navigator.geolocation.getCurrentPosition(
-      ({ coords: { latitude, longitude } }) => setCoords([latitude, longitude])
-    );
+    !loading &&
+      navigator.geolocation.getCurrentPosition(
+        ({ coords: { latitude, longitude } }) =>
+          setCoords([latitude, longitude])
+      );
   };
 
   const refresh = (options: Options) => {
-    fetchWeather(options).then(setWeather);
+    setLoading(true);
+    setTimeout(() => {
+      fetchWeather(options)
+        .then(setWeather)
+        .finally(() => setLoading(false));
+    }, 1000);
   };
 
   const sync = () => {
@@ -60,14 +71,40 @@ function App() {
   };
 
   useEffect(() => {
+    [afternoon, night].forEach((picture) => {
+      const img = new Image();
+      img.src = picture;
+    });
+  }, []);
+
+  useEffect(() => {
     coords && refresh({ coordinates: coords, units });
   }, [coords, units]);
+
+  useEffect(() => {
+    if (weather) {
+      const dt = new Date(weather.current.dt * 1000).toLocaleTimeString(
+        navigator.language,
+        { timeZone: weather.forecast.timezone, hour: "numeric", hour12: false }
+      );
+
+      const time = parseInt(dt);
+
+      if (time < 12) {
+        document.body.style.backgroundImage = `url(${day})`;
+      } else if (time < 18) {
+        document.body.style.backgroundImage = `url(${afternoon})`;
+      } else {
+        document.body.style.backgroundImage = `url(${night})`;
+      }
+    }
+  }, [weather]);
 
   return (
     <div className={styles.app}>
       <div className={styles.container}>
         <Header />
-        <div className={styles.search}>
+        <div className={`${styles.search} ${loading ? styles.disabled : ""}`}>
           <Search onClick={focusInput} />
           <input
             type="text"
@@ -77,14 +114,16 @@ function App() {
             onChange={onSearch}
             value={location}
             onKeyDown={onEnter}
+            disabled={loading}
           />
-          <Pin onClick={getLocation} id={styles.pin} />
+          <Pin onClick={getLocation} />
         </div>
         {weather && (
           <>
             <CurrentWeather
               weather={weather.current}
               timeZone={weather.forecast.timezone}
+              loading={loading}
               refreshWeather={sync}
             />
             <Forecasts weather={weather.forecast} />
