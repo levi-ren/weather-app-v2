@@ -15,15 +15,13 @@ body {
   background-size: cover;
   background-repeat: no-repeat;
 
-  transition: 1s ease all;
-  overflow: hidden;
+  transition: background-image 1s linear;
 }
 
 #root {
   max-width: 1024px;
   width: 100%;
   margin: auto 0px;
-  padding: 0px 1rem;
 }
 
 code {

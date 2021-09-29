@@ -37,7 +37,7 @@ interface CurrentForecast {
   uvi: number;
   visibility: number;
 }
-interface DailyForecast {
+export interface DailyForecast {
   dt: number;
   feels_like: {
     day: number;

@@ -2,9 +2,12 @@ import icons from "../../assets/icons";
 import { ReactComponent as SunRise } from "../../assets/sunrise.svg";
 import { ReactComponent as SunSet } from "../../assets/sunset.svg";
 import { ReactComponent as Sync } from "../../assets/sync.svg";
+import { ReactComponent as MinTemp } from "../../assets/thermometer-colder.svg";
+import { ReactComponent as MaxTemp } from "../../assets/thermometer-warmer.svg";
 import { WeatherData } from "../../interfaces/weather-models";
 import global from "../../styles/global.module.css";
 import { default as countryCodes } from "../../utilities/country-codes.json";
+import { dateToLocaleString } from "../../utilities/helpers";
 import styles from "./current-weather.module.css";
 
 const codes = countryCodes as { [key: string]: string };
@@ -21,21 +24,21 @@ const DateTimeComponent = (props: IDateTimeComponentProps) => {
 
   const date =
     !timeOnly &&
-    dateTime.toLocaleDateString(navigator.language, {
+    dateToLocaleString(dateTime, {
+      type: "date",
       timeZone,
       month: "long",
       day: "numeric",
       year: "numeric",
     });
 
-  const [time, meridiem] = dateTime
-    .toLocaleTimeString(navigator.language, {
-      timeZone,
-      hour: "2-digit",
-      minute: "2-digit",
-      hour12: true,
-    })
-    .split(" ");
+  const [time, meridiem] = dateToLocaleString(dateTime, {
+    type: "time",
+    timeZone,
+    hour: "2-digit",
+    minute: "2-digit",
+    hour12: true,
+  }).split(" ");
 
   return (
     <>
@@ -68,7 +71,19 @@ const CurrentWeather = (props: ICurrentWeatherProps) => {
       <div className={`${styles.main} ${loading ? global.loading : ""}`}>
         <div className={global.spinner} />
         <div className={styles.left}>
-          <p className={styles.temperature}>{Math.round(weather.main.temp)}°</p>
+          <div className={styles.temperature}>
+            <p>{Math.round(weather.main.temp)}°</p>
+            <div className={styles.minmax}>
+              <div>
+                <MaxTemp />
+                {Math.round(weather.main.temp_max)}°
+              </div>
+              <div>
+                <MinTemp />
+                {Math.round(weather.main.temp_max)}°
+              </div>
+            </div>
+          </div>
           <p className={styles.feels}>
             but feels like... {Math.round(weather.main.feels_like)}°
           </p>

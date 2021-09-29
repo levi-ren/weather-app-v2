@@ -24,6 +24,14 @@ export const checkAndParseToCoordinates = (x: string, y: string) => {
     : false;
 };
 
+export const dateToLocaleString = (
+  date: Date,
+  { type, ...options }: Intl.DateTimeFormatOptions & { type: "date" | "time" }
+) =>
+  type === "date"
+    ? date.toLocaleDateString(navigator.language, options)
+    : date.toLocaleTimeString(navigator.language, options);
+
 const paramBuilder = ({ city, coordinates, units }: Options) => {
   const params = {
     ...(coordinates && { lat: coordinates[0]?.toString() }),

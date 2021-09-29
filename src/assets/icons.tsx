@@ -6,12 +6,12 @@ import { ReactComponent as Mist } from "./mist.svg";
 import { ReactComponent as NA } from "./not-available.svg";
 import { ReactComponent as OvercastDay } from "./overcast-day.svg";
 import { ReactComponent as OvercastNight } from "./overcast-night.svg";
+import { ReactComponent as RainDay } from "./partly-cloudy-day-rain.svg";
 import { ReactComponent as SnowDay } from "./partly-cloudy-day-snow.svg";
 import { ReactComponent as PartlyCloudyDay } from "./partly-cloudy-day.svg";
+import { ReactComponent as RainNight } from "./partly-cloudy-night-rain.svg";
 import { ReactComponent as SnowNight } from "./partly-cloudy-night-snow.svg";
 import { ReactComponent as PartlyCloudyNight } from "./partly-cloudy-night.svg";
-import { ReactComponent as RainDay } from "./rain-day.svg";
-import { ReactComponent as RainNight } from "./rain-night.svg";
 import { ReactComponent as ThunderStormDay } from "./thunderstorms-day.svg";
 import { ReactComponent as ThunderStormNight } from "./thunderstorms-night.svg";
 

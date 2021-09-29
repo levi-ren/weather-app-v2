@@ -5,10 +5,11 @@ import night from "./assets/night.svg";
 import { ReactComponent as Pin } from "./assets/pin.svg";
 import { ReactComponent as Search } from "./assets/search.svg";
 import CurrentWeather from "./components/current-weather/CurrentWeather";
+import Forecasts from "./components/forecasts/Forecasts";
 import { Footer, Header } from "./components/Spacers";
-import Forecasts from "./Forecasts";
 import { ForecastData, WeatherData } from "./interfaces/weather-models";
 import styles from "./styles/app.module.css";
+import global from "./styles/global.module.css";
 import {
   checkAndParseToCoordinates,
   fetchWeather,
@@ -71,13 +72,6 @@ function App() {
   };
 
   useEffect(() => {
-    [afternoon, night].forEach((picture) => {
-      const img = new Image();
-      img.src = picture;
-    });
-  }, []);
-
-  useEffect(() => {
     coords && refresh({ coordinates: coords, units });
   }, [coords, units]);
 
@@ -88,11 +82,11 @@ function App() {
         { timeZone: weather.forecast.timezone, hour: "numeric", hour12: false }
       );
 
-      const time = parseInt(dt);
+      const hour = parseInt(dt);
 
-      if (time < 12) {
+      if (hour < 12) {
         document.body.style.backgroundImage = `url(${day})`;
-      } else if (time < 18) {
+      } else if (hour < 18) {
         document.body.style.backgroundImage = `url(${afternoon})`;
       } else {
         document.body.style.backgroundImage = `url(${night})`;
@@ -102,9 +96,13 @@ function App() {
 
   return (
     <div className={styles.app}>
+      <img src={day} hidden alt="" />
+      <img src={night} hidden alt="" />
+      <img src={afternoon} hidden alt="" />
       <div className={styles.container}>
         <Header />
-        <div className={`${styles.search} ${loading ? styles.disabled : ""}`}>
+        <div className={`${styles.search} ${loading ? global.loading : ""}`}>
+          <div className={global.spinner}></div>
           <Search onClick={focusInput} />
           <input
             type="text"
@@ -126,7 +124,7 @@ function App() {
               loading={loading}
               refreshWeather={sync}
             />
-            <Forecasts weather={weather.forecast} />
+            <Forecasts weather={weather.forecast} loading={loading} />
             <Footer />
           </>
         )}

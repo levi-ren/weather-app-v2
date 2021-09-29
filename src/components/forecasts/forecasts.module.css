@@ -1,0 +1,55 @@
+.forecasts {
+  padding: 18px;
+  margin-top: 18px;
+  position: relative;
+  color: white;
+  overflow: hidden;
+
+  backdrop-filter: blur(30px) saturate(100%);
+  -webkit-backdrop-filter: blur(10px) saturate(200%);
+  background-color: rgba(255, 255, 255, 0);
+  border-radius: 12px;
+  border: 1px solid rgba(209, 213, 219, 0.3);
+}
+
+.header {
+  composes: header from "../current-weather/current-weather.module.css";
+}
+
+.main {
+  display: flex;
+  justify-content: space-between;
+  overflow-x: auto;
+}
+
+.forecast {
+  padding: 10px;
+  text-transform: capitalize;
+  text-align: center;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  margin: 0 5px;
+  width: 250px;
+  min-width: 110px;
+  border-radius: 12px;
+  border: 1px solid rgba(209, 213, 219, 0.3);
+}
+
+.forecast > svg {
+  width: 100px;
+}
+
+.weekday {
+  font-size: 18px;
+  font-weight: 700;
+}
+
+.description {
+  white-space: nowrap;
+}
+
+@media only screen and (max-width: 768px) {
+}
+@media only screen and (max-width: 500px) {
+}
