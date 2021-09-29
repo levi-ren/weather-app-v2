@@ -7,6 +7,12 @@ interface Weather {
   icon: WeatherCodes;
 }
 
+interface CurrentForecast {
+  clouds: number;
+  dew_point: number;
+  uvi: number;
+  visibility: number;
+}
 export interface WeatherData {
   weather: Weather[];
   main: {
@@ -29,13 +35,6 @@ export interface WeatherData {
   name: string;
   dt: number;
   coord: { lat: number; lon: number };
-}
-
-interface CurrentForecast {
-  clouds: number;
-  dew_point: number;
-  uvi: number;
-  visibility: number;
 }
 export interface DailyForecast {
   dt: number;

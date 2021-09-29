@@ -1,5 +1,5 @@
+import global from "../../index.module.css";
 import { ForecastData } from "../../interfaces/weather-models";
-import global from "../../styles/global.module.css";
 import Forecast from "./Forecast";
 import styles from "./forecasts.module.css";
 
@@ -9,7 +9,6 @@ interface IForecastsProps {
 }
 
 const Forecasts = ({ weather, loading }: IForecastsProps) => {
-  console.log(weather);
   return (
     <div className={`${styles.forecasts} ${loading ? global.loading : ""}`}>
       <div className={global.spinner} />

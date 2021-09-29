@@ -1,10 +1,10 @@
 .app {
-  font-family: "Quicksand", sans-serif;
   padding: 0 1rem;
 }
 
 .search {
   padding: 0 24px;
+  margin-bottom: 18px;
   color: white;
 
   backdrop-filter: blur(30px) saturate(200%);
@@ -16,7 +16,7 @@
   display: flex;
   align-items: center;
 
-  margin-bottom: 18px;
+  transition: 0.5s ease background-color;
 }
 
 input {
@@ -24,9 +24,9 @@ input {
   font-weight: 300;
   border: 0;
   padding: 5px 10px;
-  width: 100%;
+  flex-grow: 1;
   background: transparent;
-  font-size: 20px;
+  font-size: 1.25em;
   color: white;
   text-transform: capitalize;
   outline: none;
@@ -34,7 +34,8 @@ input {
 }
 
 input::placeholder {
-  color: #ddd;
+  text-transform: initial;
+  color: #777;
 }
 
 .search > svg {
@@ -44,4 +45,12 @@ input::placeholder {
 
 .disabled {
   opacity: 0.9;
+}
+
+.error {
+  background-color: rgba(255, 0, 0, 0.3);
+}
+
+.search > span {
+  margin-right: 20px;
 }

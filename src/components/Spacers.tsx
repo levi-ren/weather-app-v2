@@ -1,7 +1,7 @@
 import { ReactComponent as GitHub } from "../assets/github.svg";
 import { ReactComponent as LinkedIn } from "../assets/linkedin.svg";
 import { ReactComponent as Twitter } from "../assets/twitter.svg";
-import styles from "../styles/spacers.module.css";
+import styles from "./spacers.module.css";
 
 export const Header = () => {
   return (
