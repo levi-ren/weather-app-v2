@@ -15,7 +15,7 @@ function App() {
   const [weather, setWeather] =
     useState<{ current: WeatherData; forecast: ForecastData }>();
   const [location, setLocation] = useState("");
-  const [units, setUnits] = useState("Metric");
+  const [units] = useState("Metric");
   const [error, setError] = useState("");
   const [loading, setLoading] = useState(false);
 
