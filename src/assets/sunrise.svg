@@ -1,7 +1,7 @@
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64">
   <defs>
     <linearGradient
-      id="b"
+      id="sunrise-b"
       x1="26.75"
       x2="37.25"
       y1="29.91"
@@ -19,7 +19,7 @@
       cx="32"
       cy="39"
       r="10.5"
-      fill="#f8af18"
+      fill="url(#sunrise-b)"
       stroke="#f8af18"
       stroke-width=".5"
     />
