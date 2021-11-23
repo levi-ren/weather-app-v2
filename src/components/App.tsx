@@ -20,7 +20,7 @@ import { Footer, Header } from "./Spacers";
 function App() {
   const [units] = useState("Metric");
 
-  const { weather, hour, location, coordinates, loading, error, dispatch } =
+  const { weather, hour, location, coordinates, loading, dispatch } =
     useWeatherContext();
 
   const getLocation = () => {
