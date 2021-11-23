@@ -62,3 +62,8 @@ export interface ForecastData {
   lon: number;
   timezone: string;
 }
+
+export interface CurrentWeather {
+  current: WeatherData;
+  forecast: ForecastData;
+}

@@ -21,7 +21,7 @@ const Forecast = ({ weather, timeZone }: IForecastProps) => {
       <p className={styles.weekday}>{weekday}</p>
       <p>{date}</p>
       {weather && icons[weather.weather[0].icon || "n/a"]}
-      <p className={styles.description}>{weather.weather[0].description}</p>
+      <p className={styles.description}>{weather.weather[0].main}</p>
       <p>
         {Math.round(weather.temp.max)}°/{Math.round(weather.temp.min)}°
       </p>

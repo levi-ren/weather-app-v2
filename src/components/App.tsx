@@ -1,8 +1,15 @@
-import { ChangeEvent, KeyboardEvent, useEffect, useState } from "react";
+import {
+  ChangeEvent,
+  KeyboardEvent,
+  useCallback,
+  useEffect,
+  useState,
+} from "react";
 import afternoon from "../assets/afternoon.svg";
 import day from "../assets/day.svg";
 import night from "../assets/night.svg";
-import { ForecastData, WeatherData } from "../interfaces/weather-models";
+import { useWeatherContext } from "../context/provider";
+import { Actions } from "../context/reducers";
 import { fetchWeather, Options, toCoordinates } from "../utilities/helpers";
 import styles from "./app.module.css";
 import CurrentWeather from "./current-weather/CurrentWeather";
@@ -11,35 +18,40 @@ import Search from "./search/Search";
 import { Footer, Header } from "./Spacers";
 
 function App() {
-  const [coords, setCoords] = useState<Number[]>();
-  const [weather, setWeather] =
-    useState<{ current: WeatherData; forecast: ForecastData }>();
-  const [location, setLocation] = useState("");
   const [units] = useState("Metric");
-  const [error, setError] = useState("");
-  const [loading, setLoading] = useState(false);
+
+  const { weather, hour, location, coordinates, loading, error, dispatch } =
+    useWeatherContext();
 
   const getLocation = () => {
     !loading &&
       navigator.geolocation.getCurrentPosition(
         ({ coords: { latitude, longitude } }) =>
-          setCoords([latitude, longitude])
+          dispatch({
+            type: Actions.SetCoordinates,
+            payload: [latitude, longitude],
+          }),
+        () =>
+          dispatch({
+            type: Actions.Error,
+            payload: "please allow access to your location",
+          })
       );
   };
 
-  const refresh = (options: Options) => {
-    setLoading(true);
-    setTimeout(() => {
-      fetchWeather(options)
-        .then(setWeather)
-        .catch((err) =>
-          setError(err.cod === "404" ? "Invalid location" : err.message)
-        )
-        .finally(() => {
-          setLoading(false);
-        });
-    }, 1000);
-  };
+  const refresh = useCallback(
+    (options: Options) => {
+      dispatch({ type: Actions.Load });
+      setTimeout(() => {
+        fetchWeather(options)
+          .then((resp) => dispatch({ type: Actions.Success, payload: resp }))
+          .catch((err) =>
+            dispatch({ type: Actions.Failed, payload: err.message })
+          );
+      }, 1000);
+    },
+    [dispatch]
+  );
 
   const sync = () => {
     if (weather) {
@@ -49,60 +61,41 @@ function App() {
   };
 
   const onSearch = (e: ChangeEvent<HTMLInputElement>) => {
-    setLocation(e.target.value);
+    dispatch({ type: Actions.SetLocation, payload: e.target.value });
+    // setLocation(e.target.value);
   };
 
   const onEnter = (e: KeyboardEvent<HTMLInputElement>) => {
     if (e.key.includes("Enter")) {
-      if (!location) {
-        setError("Please enter a value");
+      if (!location.trim()) {
+        console.log("object");
+        dispatch({ type: Actions.Error, payload: "Please enter a value" });
         return;
       }
       const coords = toCoordinates(location);
       if (coords === 0) {
         refresh({ city: location, units });
       } else if (coords === -1) {
-        setError("Invalid coordinates");
-      } else setCoords(coords);
+        dispatch({ type: Actions.Error, payload: "Invalid coordinates" });
+      } else dispatch({ type: Actions.SetCoordinates, payload: coords });
     }
   };
 
   useEffect(() => {
-    coords && refresh({ coordinates: coords, units });
-  }, [coords, units]);
+    coordinates && refresh({ coordinates, units });
+  }, [coordinates, units, refresh]);
 
   useEffect(() => {
-    if (weather) {
-      const dt = new Date(weather.current.dt * 1000).toLocaleTimeString(
-        navigator.language,
-        { timeZone: weather.forecast.timezone, hour: "numeric", hour12: false }
-      );
-
-      const hour = parseInt(dt);
-
-      if (hour < 12) {
-        document.body.style.backgroundImage = `url(${day})`;
-      } else if (hour < 18) {
-        document.body.style.backgroundImage = `url(${afternoon})`;
-      } else {
-        document.body.style.backgroundImage = `url(${night})`;
-      }
+    if (hour < 12) {
+      document.body.style.backgroundImage = `url(${day})`;
+    } else if (hour < 18) {
+      document.body.style.backgroundImage = `url(${afternoon})`;
+    } else {
+      document.body.style.backgroundImage = `url(${night})`;
     }
-  }, [weather]);
-
-  useEffect(() => {
-    if (error) {
-      setWeather(undefined);
-      setTimeout(() => {
-        setError("");
-      }, 3000);
-    }
-  }, [error]);
+  }, [hour]);
 
   const searchProps = {
-    error,
-    loading,
-    location,
     onSearch,
     onEnter,
     getLocation,
@@ -113,18 +106,11 @@ function App() {
       <div className={styles.container}>
         <Header />
         <Search {...searchProps} />
-        {weather && !error && (
-          <>
-            <CurrentWeather
-              weather={weather.current}
-              timeZone={weather.forecast.timezone}
-              loading={loading}
-              refreshWeather={sync}
-            />
-            <Forecasts weather={weather.forecast} loading={loading} />
-            <Footer />
-          </>
-        )}
+        <>
+          <CurrentWeather refreshWeather={sync} />
+          <Forecasts />
+          <Footer />
+        </>
       </div>
 
       <img src={day} hidden alt="" />

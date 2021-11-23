@@ -3,30 +3,27 @@
 }
 
 .search {
-  padding: 0 24px;
-  margin-bottom: 18px;
-  color: white;
-
+  color: #eee;
   backdrop-filter: blur(30px) saturate(200%);
   -webkit-backdrop-filter: blur(10px) saturate(200%);
-  background-color: rgba(255, 255, 255, 0.4);
+
+  padding: 0 24px;
+  margin-bottom: 18px;
+
   border-radius: 50px;
-  border: 1px solid rgba(209, 213, 219, 0.3);
 
   display: flex;
   align-items: center;
-
-  transition: 0.5s ease background-color;
 }
 
 input {
   font-family: inherit;
   font-weight: 300;
   border: 0;
+  font-size: 1.1em;
   padding: 5px 10px;
   flex-grow: 1;
   background: transparent;
-  font-size: 1.25em;
   color: white;
   text-transform: capitalize;
   outline: none;
@@ -34,21 +31,33 @@ input {
 }
 
 input::placeholder {
+  color: #fff;
   text-transform: initial;
-  color: #777;
 }
 
 .search > svg {
-  width: 20px;
+  min-width: 20px;
+  height: 20px;
   cursor: pointer;
+}
+
+.error {
+  display: table;
+  margin: 0 auto;
+  text-transform: lowercase;
+  text-align: center;
+  font-style: italic;
+  border-radius: 10px 10px 0 0;
+  padding: 5px 20px;
+  border-bottom: none !important;
+  color: #fff;
+
+  backdrop-filter: blur(30px) saturate(200%);
+  -webkit-backdrop-filter: blur(10px) saturate(200%);
 }
 
 .disabled {
   opacity: 0.9;
-}
-
-.error {
-  background-color: rgba(255, 0, 0, 0.3);
 }
 
 .search > span {

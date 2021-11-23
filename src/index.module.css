@@ -18,6 +18,22 @@ body {
   transition: background-image 1s linear;
 }
 
+.day {
+  transition: 0.2s ease background-color;
+  background-color: rgba(0, 0, 0, 0.4);
+  border: 1px solid rgba(209, 213, 219, 0.15);
+}
+
+.night {
+  transition: 0.2s ease background-color;
+  background-color: rgba(255, 255, 255, 0.4);
+  border: 1px solid rgba(209, 213, 219, 0.3);
+}
+
+.error {
+  background-color: rgba(255, 0, 0, 0.3) !important;
+}
+
 body > div {
   max-width: 1024px;
   width: 100%;
